@@ -2,9 +2,9 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
-import experiments2.auxiliary.auxiliary as ex2aux
+import old_experiments.experiments3.auxiliary.auxiliary as ex2aux
 
-from experiments3.random_DAG_generation import *
+from old_experiments.experiments3.random_DAG_generation import *
 import random
 
 
