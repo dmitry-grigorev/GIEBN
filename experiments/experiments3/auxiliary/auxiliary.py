@@ -131,9 +131,9 @@ def construct_by_kmeans(data: pd.DataFrame, categoricals: list, scoring, max_cat
     encoder = KBinsDiscretizer(strategy='kmeans', n_bins=3, random_state=42)
     data_discretized_enc = pd.DataFrame(
         encoder.fit_transform(X=data_discretized[data_discretized.columns.difference(categoricals)]).toarray(),
-        dtype='uint8')
+        dtype='uint8') if len(conts) > 0 else pd.DataFrame(dtype='uint8')
 
-    categories = [feat + str(int(k)) for feat in encoder.feature_names_in_ for k in range(3)]
+    categories = [feat + str(int(k)) for feat in encoder.feature_names_in_ for k in range(3)] if len(conts) > 0 else list()
 
     data_discretized_enc.columns = categories
 

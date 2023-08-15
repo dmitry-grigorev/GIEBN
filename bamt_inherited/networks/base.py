@@ -80,12 +80,10 @@ class BaseNetworkGI(nets.BaseNetwork):
             customs = {k: v for k, v in
                        zip(self.custom_mapper.keys(), list(range(class_number, len(hex_colors_picked))))}
             name2class = {node.name: (
-                node.name[-1] if node.name[:(len(node.name) - 1)] not in self.custom_mapper.keys() else node.name[
-                                                                                                        :(
-                                                                                                                len(node.name) - 1)])
+                node.name.split("_")[1] if node.name.split("_")[0] not in self.custom_mapper.keys() else node.name.split("_")[0])
                 for node in self.nodes}
         else:
-            name2class = {node.name: node.name[-1] for node in self.nodes}
+            name2class = {node.name: node.name.split("_")[1] for node in self.nodes}
 
         if self.custom_mapper is not None:
             name_mapper = self.custom_mapper
@@ -99,21 +97,21 @@ class BaseNetworkGI(nets.BaseNetwork):
         for level in range(len(nodes_sorted)):
             for node_i in range(len(nodes_sorted[level])):
                 name = nodes_sorted[level][node_i]
-                if self.custom_mapper is None or name[:(len(name) - 1)] not in self.custom_mapper.keys():
+                if self.custom_mapper is None or name.split("_")[0] not in self.custom_mapper.keys():
                     cls = int(name2class[name])
                 else:
                     cls = customs[name2class[name]]
                     # name2class[customs[name[:(len(name)-1)]]]
                 color = class2color[cls]
-                if self.custom_mapper is None or name[:(len(name) - 1)] not in self.custom_mapper.keys():
-                    network.add_node(name, label=name[:(len(name) - 1)] + '_' + name_mapper['other'][cls], color=color,
+                if self.custom_mapper is None or name.split("_")[0] not in self.custom_mapper.keys():
+                    network.add_node(name, label=name.split("_")[0] + '_' + name_mapper['other'][cls], color=color,
                                      size=45, level=level, font={'size': 36},
                                      title=f"Узел байесовской сети {name} (Уровень {name_mapper['other'][cls]})")
                 else:
-                    network.add_node(name, label=name[:(len(name) - 1)] + '_' + self.custom_mapper[name2class[name]][
+                    network.add_node(name, label=name.split("_")[0] + '_' + self.custom_mapper[name2class[name]][
                         int(name[-1])], color=color, size=45,
                                      level=level, font={'size': 36},
-                                     title=f"Узел байесовской сети {name[:(len(name) - 1)] + '_' + self.custom_mapper[name2class[name]][int(name[-1])]}")
+                                     title=f"Узел байесовской сети {name.split('_')[0] + '_' + self.custom_mapper[name2class[name]][int(name.split('_')[1])]}")
 
         for edge in G.edges:
             network.add_edge(edge[0], edge[1])
