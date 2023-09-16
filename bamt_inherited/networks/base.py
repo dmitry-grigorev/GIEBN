@@ -1,4 +1,4 @@
-import bamt.networks as nets
+from bamt.networks.base import BaseNetwork
 from bamt.log import logger_network
 from pyvis.network import Network
 
@@ -10,7 +10,7 @@ import matplotlib
 
 from typing import Dict, Tuple, List, Callable, Optional, Type, Union, Any, Sequence
 
-class BaseNetworkGI(nets.BaseNetwork):
+class BaseNetworkGI(BaseNetwork):
     """
     Minor redefinition of BAMT`s base network in how to plot it for gradation interaction
     :param outputdirectory: define a directory where to save output of plot
