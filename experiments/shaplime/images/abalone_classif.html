@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#fbb4ae", "font": {"size": 36}, "id": "W_weight_0", "label": "W_weight_Low", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 W_weight_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "S_weight_0", "label": "S_weight_Low", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 S_weight_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "shell_weight_0", "label": "shell_weight_Low", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 shell_weight_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "height_0", "label": "height_Low", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 height_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "diameter_2", "label": "diameter_High", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 diameter_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "length_0", "label": "length_Low", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 length_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "length_2", "label": "length_High", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 length_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "diameter_0", "label": "diameter_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 diameter_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "S_weight_2", "label": "S_weight_High", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 S_weight_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "height_2", "label": "height_High", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 height_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "W_weight_2", "label": "W_weight_High", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 W_weight_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "shell_weight_2", "label": "shell_weight_High", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 shell_weight_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "viscera_weight_2", "label": "viscera_weight_High", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 viscera_weight_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "height_1", "label": "height_Mid", "level": 8, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 height_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "diameter_1", "label": "diameter_Mid", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 diameter_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "rings_0", "label": "rings_Low", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 rings_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "inconf_error_1", "label": "inconf_error_Mid", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "length_1", "label": "length_Mid", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 length_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "viscera_weight_0", "label": "viscera_weight_Low", "level": 11, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 viscera_weight_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "S_weight_1", "label": "S_weight_Mid", "level": 12, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 S_weight_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "W_weight_1", "label": "W_weight_Mid", "level": 13, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 W_weight_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "inconf_error_2", "label": "inconf_error_High", "level": 13, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "rings_2", "label": "rings_High", "level": 13, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 rings_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "shell_weight_1", "label": "shell_weight_Mid", "level": 14, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 shell_weight_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "viscera_weight_1", "label": "viscera_weight_Mid", "level": 14, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 viscera_weight_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "rings_1", "label": "rings_Mid", "level": 15, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 rings_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "inconf_error_0", "label": "inconf_error_Low", "level": 15, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "W_weight_0", "to": "S_weight_0"}, {"arrows": "to", "from": "W_weight_0", "to": "shell_weight_0"}, {"arrows": "to", "from": "W_weight_0", "to": "viscera_weight_0"}, {"arrows": "to", "from": "W_weight_0", "to": "S_weight_1"}, {"arrows": "to", "from": "W_weight_0", "to": "length_0"}, {"arrows": "to", "from": "W_weight_0", "to": "diameter_0"}, {"arrows": "to", "from": "W_weight_0", "to": "diameter_2"}, {"arrows": "to", "from": "W_weight_0", "to": "height_2"}, {"arrows": "to", "from": "W_weight_0", "to": "height_0"}, {"arrows": "to", "from": "S_weight_0", "to": "diameter_2"}, {"arrows": "to", "from": "S_weight_0", "to": "length_2"}, {"arrows": "to", "from": "S_weight_0", "to": "height_0"}, {"arrows": "to", "from": "S_weight_0", "to": "length_1"}, {"arrows": "to", "from": "S_weight_0", "to": "diameter_1"}, {"arrows": "to", "from": "S_weight_0", "to": "rings_0"}, {"arrows": "to", "from": "S_weight_0", "to": "rings_1"}, {"arrows": "to", "from": "S_weight_0", "to": "rings_2"}, {"arrows": "to", "from": "S_weight_0", "to": "viscera_weight_0"}, {"arrows": "to", "from": "S_weight_0", "to": "height_1"}, {"arrows": "to", "from": "S_weight_0", "to": "W_weight_1"}, {"arrows": "to", "from": "shell_weight_0", "to": "height_0"}, {"arrows": "to", "from": "shell_weight_0", "to": "diameter_2"}, {"arrows": "to", "from": "shell_weight_0", "to": "W_weight_1"}, {"arrows": "to", "from": "shell_weight_0", "to": "height_2"}, {"arrows": "to", "from": "shell_weight_0", "to": "rings_0"}, {"arrows": "to", "from": "shell_weight_0", "to": "length_2"}, {"arrows": "to", "from": "shell_weight_0", "to": "rings_2"}, {"arrows": "to", "from": "shell_weight_0", "to": "diameter_1"}, {"arrows": "to", "from": "shell_weight_0", "to": "length_1"}, {"arrows": "to", "from": "shell_weight_0", "to": "viscera_weight_0"}, {"arrows": "to", "from": "shell_weight_0", "to": "height_1"}, {"arrows": "to", "from": "shell_weight_0", "to": "length_0"}, {"arrows": "to", "from": "height_0", "to": "length_0"}, {"arrows": "to", "from": "height_0", "to": "shell_weight_1"}, {"arrows": "to", "from": "height_0", "to": "length_1"}, {"arrows": "to", "from": "height_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "height_0", "to": "viscera_weight_1"}, {"arrows": "to", "from": "height_0", "to": "rings_1"}, {"arrows": "to", "from": "diameter_2", "to": "length_2"}, {"arrows": "to", "from": "diameter_2", "to": "height_2"}, {"arrows": "to", "from": "diameter_2", "to": "viscera_weight_1"}, {"arrows": "to", "from": "diameter_2", "to": "shell_weight_2"}, {"arrows": "to", "from": "diameter_2", "to": "viscera_weight_0"}, {"arrows": "to", "from": "diameter_2", "to": "height_1"}, {"arrows": "to", "from": "diameter_2", "to": "S_weight_2"}, {"arrows": "to", "from": "diameter_2", "to": "length_1"}, {"arrows": "to", "from": "length_0", "to": "diameter_0"}, {"arrows": "to", "from": "length_0", "to": "diameter_1"}, {"arrows": "to", "from": "length_0", "to": "height_1"}, {"arrows": "to", "from": "length_0", "to": "rings_1"}, {"arrows": "to", "from": "length_0", "to": "rings_0"}, {"arrows": "to", "from": "length_2", "to": "diameter_1"}, {"arrows": "to", "from": "length_2", "to": "S_weight_2"}, {"arrows": "to", "from": "length_2", "to": "viscera_weight_2"}, {"arrows": "to", "from": "length_2", "to": "W_weight_2"}, {"arrows": "to", "from": "length_2", "to": "height_2"}, {"arrows": "to", "from": "diameter_0", "to": "inconf_error_0"}, {"arrows": "to", "from": "diameter_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "diameter_0", "to": "height_1"}, {"arrows": "to", "from": "diameter_0", "to": "shell_weight_1"}, {"arrows": "to", "from": "S_weight_2", "to": "W_weight_2"}, {"arrows": "to", "from": "S_weight_2", "to": "rings_0"}, {"arrows": "to", "from": "S_weight_2", "to": "viscera_weight_2"}, {"arrows": "to", "from": "S_weight_2", "to": "height_2"}, {"arrows": "to", "from": "height_2", "to": "W_weight_2"}, {"arrows": "to", "from": "height_2", "to": "shell_weight_2"}, {"arrows": "to", "from": "height_2", "to": "viscera_weight_2"}, {"arrows": "to", "from": "height_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "W_weight_2", "to": "shell_weight_2"}, {"arrows": "to", "from": "W_weight_2", "to": "viscera_weight_2"}, {"arrows": "to", "from": "W_weight_2", "to": "S_weight_1"}, {"arrows": "to", "from": "W_weight_2", "to": "height_1"}, {"arrows": "to", "from": "W_weight_2", "to": "length_1"}, {"arrows": "to", "from": "W_weight_2", "to": "viscera_weight_0"}, {"arrows": "to", "from": "shell_weight_2", "to": "W_weight_1"}, {"arrows": "to", "from": "shell_weight_2", "to": "rings_0"}, {"arrows": "to", "from": "shell_weight_2", "to": "height_1"}, {"arrows": "to", "from": "shell_weight_2", "to": "rings_2"}, {"arrows": "to", "from": "shell_weight_2", "to": "rings_1"}, {"arrows": "to", "from": "shell_weight_2", "to": "inconf_error_1"}, {"arrows": "to", "from": "shell_weight_2", "to": "diameter_1"}, {"arrows": "to", "from": "viscera_weight_2", "to": "W_weight_1"}, {"arrows": "to", "from": "viscera_weight_2", "to": "height_1"}, {"arrows": "to", "from": "viscera_weight_2", "to": "S_weight_1"}, {"arrows": "to", "from": "height_1", "to": "diameter_1"}, {"arrows": "to", "from": "height_1", "to": "inconf_error_0"}, {"arrows": "to", "from": "height_1", "to": "rings_0"}, {"arrows": "to", "from": "height_1", "to": "viscera_weight_1"}, {"arrows": "to", "from": "height_1", "to": "inconf_error_1"}, {"arrows": "to", "from": "height_1", "to": "shell_weight_1"}, {"arrows": "to", "from": "diameter_1", "to": "length_1"}, {"arrows": "to", "from": "diameter_1", "to": "inconf_error_2"}, {"arrows": "to", "from": "diameter_1", "to": "shell_weight_1"}, {"arrows": "to", "from": "rings_0", "to": "S_weight_1"}, {"arrows": "to", "from": "rings_0", "to": "shell_weight_1"}, {"arrows": "to", "from": "length_1", "to": "viscera_weight_0"}, {"arrows": "to", "from": "length_1", "to": "S_weight_1"}, {"arrows": "to", "from": "viscera_weight_0", "to": "W_weight_1"}, {"arrows": "to", "from": "viscera_weight_0", "to": "S_weight_1"}, {"arrows": "to", "from": "S_weight_1", "to": "W_weight_1"}, {"arrows": "to", "from": "S_weight_1", "to": "inconf_error_2"}, {"arrows": "to", "from": "S_weight_1", "to": "rings_2"}, {"arrows": "to", "from": "S_weight_1", "to": "viscera_weight_1"}, {"arrows": "to", "from": "W_weight_1", "to": "shell_weight_1"}, {"arrows": "to", "from": "W_weight_1", "to": "viscera_weight_1"}, {"arrows": "to", "from": "W_weight_1", "to": "inconf_error_0"}, {"arrows": "to", "from": "shell_weight_1", "to": "rings_1"}, {"arrows": "to", "from": "viscera_weight_1", "to": "inconf_error_0"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

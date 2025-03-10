@@ -1,0 +1,129 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#b3cde3", "font": {"size": 36}, "id": "PKC", "label": "PKC", "level": 0, "shape": "dot", "size": 45, "title": "PKC (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Plcg", "label": "Plcg", "level": 0, "shape": "dot", "size": 45, "title": "Plcg (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PKA", "label": "PKA", "level": 1, "shape": "dot", "size": 45, "title": "PKA (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PIP3", "label": "PIP3", "level": 1, "shape": "dot", "size": 45, "title": "PIP3 (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Jnk", "label": "Jnk", "level": 2, "shape": "dot", "size": 45, "title": "Jnk (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "P38", "label": "P38", "level": 2, "shape": "dot", "size": 45, "title": "P38 (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Raf", "label": "Raf", "level": 2, "shape": "dot", "size": 45, "title": "Raf (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PIP2", "label": "PIP2", "level": 2, "shape": "dot", "size": 45, "title": "PIP2 (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Mek", "label": "Mek", "level": 3, "shape": "dot", "size": 45, "title": "Mek (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Erk", "label": "Erk", "level": 4, "shape": "dot", "size": 45, "title": "Erk (Discrete)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Akt", "label": "Akt", "level": 5, "shape": "dot", "size": 45, "title": "Akt (Discrete)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "PKC", "to": "Jnk"}, {"arrows": "to", "from": "PKC", "to": "Mek"}, {"arrows": "to", "from": "PKC", "to": "P38"}, {"arrows": "to", "from": "PKC", "to": "PKA"}, {"arrows": "to", "from": "PKC", "to": "Raf"}, {"arrows": "to", "from": "Plcg", "to": "PIP2"}, {"arrows": "to", "from": "Plcg", "to": "PIP3"}, {"arrows": "to", "from": "PKA", "to": "Akt"}, {"arrows": "to", "from": "PKA", "to": "Erk"}, {"arrows": "to", "from": "PKA", "to": "Jnk"}, {"arrows": "to", "from": "PKA", "to": "Mek"}, {"arrows": "to", "from": "PKA", "to": "P38"}, {"arrows": "to", "from": "PKA", "to": "Raf"}, {"arrows": "to", "from": "PIP3", "to": "PIP2"}, {"arrows": "to", "from": "Raf", "to": "Mek"}, {"arrows": "to", "from": "Mek", "to": "Erk"}, {"arrows": "to", "from": "Erk", "to": "Akt"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

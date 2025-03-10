@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#fbb4ae", "font": {"size": 36}, "id": "PIP2_0", "label": "PIP2_Low", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP2_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PIP2_1", "label": "PIP2_Mid", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP2_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "PIP2_2", "label": "PIP2_High", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP2_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Raf_0", "label": "Raf_Low", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Raf_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Raf_1", "label": "Raf_Mid", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Raf_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Raf_2", "label": "Raf_High", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Raf_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "PIP3_0", "label": "PIP3_Low", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP3_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PIP3_1", "label": "PIP3_Mid", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP3_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "PIP3_2", "label": "PIP3_High", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PIP3_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Mek_0", "label": "Mek_Low", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Mek_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Mek_1", "label": "Mek_Mid", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Mek_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Mek_2", "label": "Mek_High", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Mek_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Plcg_0", "label": "Plcg_Low", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Plcg_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Plcg_1", "label": "Plcg_Mid", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Plcg_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Plcg_2", "label": "Plcg_High", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Plcg_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "PKA_0", "label": "PKA_Low", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKA_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PKA_1", "label": "PKA_Mid", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKA_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "PKA_2", "label": "PKA_High", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKA_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Akt_0", "label": "Akt_Low", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Akt_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Akt_1", "label": "Akt_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Akt_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Akt_2", "label": "Akt_High", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Akt_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "PKC_1", "label": "PKC_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKC_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "PKC_2", "label": "PKC_High", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKC_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "PKC_0", "label": "PKC_Low", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 PKC_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Erk_0", "label": "Erk_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Erk_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Erk_1", "label": "Erk_Mid", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Erk_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Erk_2", "label": "Erk_High", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Erk_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Jnk_0", "label": "Jnk_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Jnk_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Jnk_1", "label": "Jnk_Mid", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Jnk_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Jnk_2", "label": "Jnk_High", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Jnk_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "P38_0", "label": "P38_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 P38_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "P38_1", "label": "P38_Mid", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 P38_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "P38_2", "label": "P38_High", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 P38_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Akt_0", "to": "Erk_0"}, {"arrows": "to", "from": "Akt_1", "to": "Erk_1"}, {"arrows": "to", "from": "Akt_2", "to": "Erk_2"}, {"arrows": "to", "from": "Mek_0", "to": "Akt_0"}, {"arrows": "to", "from": "Mek_0", "to": "Akt_1"}, {"arrows": "to", "from": "Mek_0", "to": "Akt_2"}, {"arrows": "to", "from": "Mek_0", "to": "PKA_0"}, {"arrows": "to", "from": "Mek_0", "to": "PKC_0"}, {"arrows": "to", "from": "Mek_1", "to": "PKA_1"}, {"arrows": "to", "from": "Mek_1", "to": "PKC_1"}, {"arrows": "to", "from": "Mek_2", "to": "PKA_2"}, {"arrows": "to", "from": "Mek_2", "to": "PKC_2"}, {"arrows": "to", "from": "PIP2_0", "to": "PIP3_0"}, {"arrows": "to", "from": "PIP2_0", "to": "Plcg_0"}, {"arrows": "to", "from": "PIP2_1", "to": "PIP3_1"}, {"arrows": "to", "from": "PIP2_1", "to": "Plcg_1"}, {"arrows": "to", "from": "PIP2_2", "to": "PIP3_2"}, {"arrows": "to", "from": "PIP2_2", "to": "Plcg_2"}, {"arrows": "to", "from": "PIP3_0", "to": "Plcg_0"}, {"arrows": "to", "from": "PIP3_0", "to": "Plcg_1"}, {"arrows": "to", "from": "PIP3_0", "to": "Plcg_2"}, {"arrows": "to", "from": "PKA_0", "to": "Akt_0"}, {"arrows": "to", "from": "PKA_0", "to": "Akt_1"}, {"arrows": "to", "from": "PKA_0", "to": "Akt_2"}, {"arrows": "to", "from": "PKA_0", "to": "Erk_0"}, {"arrows": "to", "from": "PKA_0", "to": "Erk_1"}, {"arrows": "to", "from": "PKA_0", "to": "Erk_2"}, {"arrows": "to", "from": "PKA_0", "to": "Jnk_0"}, {"arrows": "to", "from": "PKA_0", "to": "Jnk_1"}, {"arrows": "to", "from": "PKA_0", "to": "Jnk_2"}, {"arrows": "to", "from": "PKA_0", "to": "P38_0"}, {"arrows": "to", "from": "PKA_0", "to": "P38_1"}, {"arrows": "to", "from": "PKA_0", "to": "P38_2"}, {"arrows": "to", "from": "PKA_0", "to": "PKC_1"}, {"arrows": "to", "from": "PKA_0", "to": "PKC_2"}, {"arrows": "to", "from": "PKA_2", "to": "PKC_0"}, {"arrows": "to", "from": "PKC_1", "to": "Jnk_0"}, {"arrows": "to", "from": "PKC_1", "to": "Jnk_1"}, {"arrows": "to", "from": "PKC_1", "to": "Jnk_2"}, {"arrows": "to", "from": "PKC_1", "to": "P38_0"}, {"arrows": "to", "from": "PKC_1", "to": "P38_1"}, {"arrows": "to", "from": "PKC_1", "to": "P38_2"}, {"arrows": "to", "from": "Raf_0", "to": "Mek_0"}, {"arrows": "to", "from": "Raf_0", "to": "Mek_1"}, {"arrows": "to", "from": "Raf_0", "to": "Mek_2"}, {"arrows": "to", "from": "Raf_0", "to": "PKA_0"}, {"arrows": "to", "from": "Raf_0", "to": "PKA_1"}, {"arrows": "to", "from": "Raf_0", "to": "PKA_2"}, {"arrows": "to", "from": "Raf_0", "to": "PKC_0"}, {"arrows": "to", "from": "Raf_0", "to": "PKC_1"}, {"arrows": "to", "from": "Raf_0", "to": "PKC_2"}, {"arrows": "to", "from": "Raf_1", "to": "Erk_0"}, {"arrows": "to", "from": "Raf_1", "to": "Erk_1"}, {"arrows": "to", "from": "Raf_2", "to": "Erk_2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
