@@ -1,0 +1,129 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#fbb4ae", "font": {"size": 36}, "id": "diameter", "label": "diameter", "level": 0, "shape": "dot", "size": 45, "title": "diameter (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "ape_error_2", "label": "ape_error_2", "level": 0, "shape": "dot", "size": 45, "title": "ape_error_2 (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "length", "label": "length", "level": 1, "shape": "dot", "size": 45, "title": "length (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "W_weight", "label": "W_weight", "level": 2, "shape": "dot", "size": 45, "title": "W_weight (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "S_weight", "label": "S_weight", "level": 3, "shape": "dot", "size": 45, "title": "S_weight (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "viscera_weight", "label": "viscera_weight", "level": 3, "shape": "dot", "size": 45, "title": "viscera_weight (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "shell_weight", "label": "shell_weight", "level": 3, "shape": "dot", "size": 45, "title": "shell_weight (Discrete)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "height", "label": "height", "level": 4, "shape": "dot", "size": 45, "title": "height (Discrete)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "diameter", "to": "length"}, {"arrows": "to", "from": "diameter", "to": "W_weight"}, {"arrows": "to", "from": "diameter", "to": "shell_weight"}, {"arrows": "to", "from": "length", "to": "W_weight"}, {"arrows": "to", "from": "W_weight", "to": "S_weight"}, {"arrows": "to", "from": "W_weight", "to": "viscera_weight"}, {"arrows": "to", "from": "W_weight", "to": "shell_weight"}, {"arrows": "to", "from": "shell_weight", "to": "height"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
