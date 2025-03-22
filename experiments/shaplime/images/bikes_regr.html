@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#fbb4ae", "font": {"size": 36}, "id": "windspeed_0", "label": "windspeed_Low", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 windspeed_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "humidity_2", "label": "humidity_High", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 humidity_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "feel_temp_1", "label": "feel_temp_Mid", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 feel_temp_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "feel_temp_2", "label": "feel_temp_High", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 feel_temp_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "feel_temp_0", "label": "feel_temp_Low", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 feel_temp_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "ape_error_1", "label": "ape_error_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 ape_error_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "windspeed_1", "label": "windspeed_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 windspeed_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "humidity_0", "label": "humidity_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 humidity_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "ape_error_2", "label": "ape_error_High", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 ape_error_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "windspeed_2", "label": "windspeed_High", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 windspeed_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "humidity_1", "label": "humidity_Mid", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 humidity_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "ape_error_0", "label": "ape_error_Low", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 ape_error_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "windspeed_0", "to": "humidity_0"}, {"arrows": "to", "from": "windspeed_0", "to": "humidity_2"}, {"arrows": "to", "from": "windspeed_0", "to": "ape_error_2"}, {"arrows": "to", "from": "windspeed_0", "to": "ape_error_1"}, {"arrows": "to", "from": "humidity_2", "to": "feel_temp_1"}, {"arrows": "to", "from": "humidity_2", "to": "windspeed_1"}, {"arrows": "to", "from": "humidity_2", "to": "ape_error_2"}, {"arrows": "to", "from": "humidity_2", "to": "feel_temp_2"}, {"arrows": "to", "from": "humidity_2", "to": "feel_temp_0"}, {"arrows": "to", "from": "humidity_2", "to": "ape_error_1"}, {"arrows": "to", "from": "feel_temp_1", "to": "humidity_1"}, {"arrows": "to", "from": "feel_temp_1", "to": "humidity_0"}, {"arrows": "to", "from": "feel_temp_2", "to": "ape_error_2"}, {"arrows": "to", "from": "feel_temp_2", "to": "ape_error_0"}, {"arrows": "to", "from": "feel_temp_2", "to": "windspeed_2"}, {"arrows": "to", "from": "feel_temp_0", "to": "ape_error_1"}, {"arrows": "to", "from": "feel_temp_0", "to": "windspeed_1"}, {"arrows": "to", "from": "windspeed_1", "to": "humidity_0"}, {"arrows": "to", "from": "humidity_0", "to": "ape_error_2"}, {"arrows": "to", "from": "humidity_0", "to": "windspeed_2"}, {"arrows": "to", "from": "humidity_0", "to": "ape_error_0"}, {"arrows": "to", "from": "windspeed_2", "to": "humidity_1"}, {"arrows": "to", "from": "humidity_1", "to": "ape_error_0"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
