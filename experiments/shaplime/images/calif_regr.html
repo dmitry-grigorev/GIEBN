@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#fbb4ae", "font": {"size": 36}, "id": "AveOccup_0", "label": "AveOccup_Low", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveOccup_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Latitude_2", "label": "Latitude_High", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Latitude_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "MedInc_0", "label": "MedInc_Low", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 MedInc_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Latitude_1", "label": "Latitude_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Latitude_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "AveRooms_0", "label": "AveRooms_Low", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveRooms_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "AveBedrms_2", "label": "AveBedrms_High", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveBedrms_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "MedInc_1", "label": "MedInc_Mid", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 MedInc_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "AveRooms_2", "label": "AveRooms_High", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveRooms_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "MedInc_2", "label": "MedInc_High", "level": 8, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 MedInc_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "AveRooms_1", "label": "AveRooms_Mid", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveRooms_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "AveOccup_1", "label": "AveOccup_Mid", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveOccup_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Population_1", "label": "Population_Mid", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Population_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Population_0", "label": "Population_Low", "level": 11, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Population_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "HouseAge_2", "label": "HouseAge_High", "level": 12, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 HouseAge_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "AveBedrms_1", "label": "AveBedrms_Mid", "level": 12, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveBedrms_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Longitude_0", "label": "Longitude_Low", "level": 13, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Longitude_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "AveOccup_2", "label": "AveOccup_High", "level": 14, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveOccup_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Population_2", "label": "Population_High", "level": 15, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Population_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "HouseAge_0", "label": "HouseAge_Low", "level": 16, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 HouseAge_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "AveBedrms_0", "label": "AveBedrms_Low", "level": 16, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 AveBedrms_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Latitude_0", "label": "Latitude_Low", "level": 17, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Latitude_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "inconf_error_2", "label": "inconf_error_High", "level": 17, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Longitude_1", "label": "Longitude_Mid", "level": 18, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Longitude_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "HouseAge_1", "label": "HouseAge_Mid", "level": 19, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 HouseAge_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Longitude_2", "label": "Longitude_High", "level": 20, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Longitude_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "inconf_error_0", "label": "inconf_error_Low", "level": 21, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "inconf_error_1", "label": "inconf_error_Mid", "level": 21, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "AveOccup_0", "to": "Population_0"}, {"arrows": "to", "from": "AveOccup_0", "to": "AveRooms_2"}, {"arrows": "to", "from": "AveOccup_0", "to": "AveRooms_0"}, {"arrows": "to", "from": "AveOccup_0", "to": "AveBedrms_0"}, {"arrows": "to", "from": "AveOccup_0", "to": "AveBedrms_2"}, {"arrows": "to", "from": "AveOccup_0", "to": "MedInc_1"}, {"arrows": "to", "from": "AveOccup_0", "to": "inconf_error_0"}, {"arrows": "to", "from": "AveOccup_0", "to": "MedInc_0"}, {"arrows": "to", "from": "AveOccup_0", "to": "HouseAge_1"}, {"arrows": "to", "from": "AveOccup_0", "to": "Latitude_2"}, {"arrows": "to", "from": "AveOccup_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "AveOccup_0", "to": "Latitude_1"}, {"arrows": "to", "from": "AveOccup_0", "to": "HouseAge_2"}, {"arrows": "to", "from": "Latitude_2", "to": "Longitude_0"}, {"arrows": "to", "from": "Latitude_2", "to": "AveRooms_0"}, {"arrows": "to", "from": "Latitude_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "Latitude_2", "to": "MedInc_0"}, {"arrows": "to", "from": "Latitude_2", "to": "MedInc_1"}, {"arrows": "to", "from": "Latitude_2", "to": "inconf_error_1"}, {"arrows": "to", "from": "Latitude_2", "to": "AveRooms_2"}, {"arrows": "to", "from": "Latitude_2", "to": "MedInc_2"}, {"arrows": "to", "from": "Latitude_2", "to": "AveOccup_2"}, {"arrows": "to", "from": "Latitude_2", "to": "HouseAge_0"}, {"arrows": "to", "from": "Latitude_2", "to": "HouseAge_2"}, {"arrows": "to", "from": "Latitude_2", "to": "AveRooms_1"}, {"arrows": "to", "from": "Latitude_2", "to": "inconf_error_2"}, {"arrows": "to", "from": "Latitude_2", "to": "AveOccup_1"}, {"arrows": "to", "from": "MedInc_0", "to": "AveRooms_2"}, {"arrows": "to", "from": "MedInc_0", "to": "AveRooms_0"}, {"arrows": "to", "from": "MedInc_0", "to": "AveBedrms_2"}, {"arrows": "to", "from": "MedInc_0", "to": "AveBedrms_0"}, {"arrows": "to", "from": "MedInc_0", "to": "Longitude_1"}, {"arrows": "to", "from": "MedInc_0", "to": "Longitude_0"}, {"arrows": "to", "from": "MedInc_0", "to": "inconf_error_0"}, {"arrows": "to", "from": "MedInc_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "MedInc_0", "to": "Latitude_0"}, {"arrows": "to", "from": "MedInc_0", "to": "Longitude_2"}, {"arrows": "to", "from": "MedInc_0", "to": "AveOccup_2"}, {"arrows": "to", "from": "MedInc_0", "to": "inconf_error_2"}, {"arrows": "to", "from": "MedInc_0", "to": "Latitude_1"}, {"arrows": "to", "from": "MedInc_0", "to": "HouseAge_1"}, {"arrows": "to", "from": "Latitude_1", "to": "Longitude_0"}, {"arrows": "to", "from": "Latitude_1", "to": "Longitude_1"}, {"arrows": "to", "from": "Latitude_1", "to": "AveRooms_0"}, {"arrows": "to", "from": "Latitude_1", "to": "AveRooms_1"}, {"arrows": "to", "from": "Latitude_1", "to": "HouseAge_1"}, {"arrows": "to", "from": "AveRooms_0", "to": "MedInc_1"}, {"arrows": "to", "from": "AveRooms_0", "to": "AveOccup_1"}, {"arrows": "to", "from": "AveRooms_0", "to": "Longitude_1"}, {"arrows": "to", "from": "AveRooms_0", "to": "Latitude_0"}, {"arrows": "to", "from": "AveRooms_0", "to": "AveBedrms_2"}, {"arrows": "to", "from": "AveRooms_0", "to": "Longitude_2"}, {"arrows": "to", "from": "AveRooms_0", "to": "Population_2"}, {"arrows": "to", "from": "AveBedrms_2", "to": "AveRooms_2"}, {"arrows": "to", "from": "AveBedrms_2", "to": "MedInc_1"}, {"arrows": "to", "from": "AveBedrms_2", "to": "HouseAge_0"}, {"arrows": "to", "from": "AveBedrms_2", "to": "MedInc_2"}, {"arrows": "to", "from": "AveBedrms_2", "to": "HouseAge_1"}, {"arrows": "to", "from": "AveBedrms_2", "to": "Population_0"}, {"arrows": "to", "from": "AveBedrms_2", "to": "AveRooms_1"}, {"arrows": "to", "from": "AveBedrms_2", "to": "AveOccup_1"}, {"arrows": "to", "from": "AveBedrms_2", "to": "Population_1"}, {"arrows": "to", "from": "AveBedrms_2", "to": "Population_2"}, {"arrows": "to", "from": "MedInc_1", "to": "AveRooms_2"}, {"arrows": "to", "from": "MedInc_1", "to": "AveRooms_1"}, {"arrows": "to", "from": "AveRooms_2", "to": "MedInc_2"}, {"arrows": "to", "from": "AveRooms_2", "to": "HouseAge_0"}, {"arrows": "to", "from": "AveRooms_2", "to": "HouseAge_2"}, {"arrows": "to", "from": "AveRooms_2", "to": "AveBedrms_0"}, {"arrows": "to", "from": "AveRooms_2", "to": "Population_0"}, {"arrows": "to", "from": "AveRooms_2", "to": "Longitude_0"}, {"arrows": "to", "from": "MedInc_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "MedInc_2", "to": "AveRooms_1"}, {"arrows": "to", "from": "MedInc_2", "to": "inconf_error_1"}, {"arrows": "to", "from": "MedInc_2", "to": "inconf_error_2"}, {"arrows": "to", "from": "AveRooms_1", "to": "AveOccup_1"}, {"arrows": "to", "from": "AveRooms_1", "to": "Population_1"}, {"arrows": "to", "from": "AveOccup_1", "to": "Population_0"}, {"arrows": "to", "from": "Population_1", "to": "HouseAge_2"}, {"arrows": "to", "from": "Population_1", "to": "AveBedrms_1"}, {"arrows": "to", "from": "Population_1", "to": "AveBedrms_0"}, {"arrows": "to", "from": "Population_0", "to": "HouseAge_2"}, {"arrows": "to", "from": "Population_0", "to": "AveOccup_2"}, {"arrows": "to", "from": "Population_0", "to": "AveBedrms_1"}, {"arrows": "to", "from": "HouseAge_2", "to": "Population_2"}, {"arrows": "to", "from": "HouseAge_2", "to": "Longitude_0"}, {"arrows": "to", "from": "HouseAge_2", "to": "AveOccup_2"}, {"arrows": "to", "from": "HouseAge_2", "to": "Longitude_1"}, {"arrows": "to", "from": "AveBedrms_1", "to": "Population_2"}, {"arrows": "to", "from": "Longitude_0", "to": "Latitude_0"}, {"arrows": "to", "from": "Longitude_0", "to": "AveOccup_2"}, {"arrows": "to", "from": "AveOccup_2", "to": "Population_2"}, {"arrows": "to", "from": "AveOccup_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "AveOccup_2", "to": "HouseAge_0"}, {"arrows": "to", "from": "AveOccup_2", "to": "inconf_error_1"}, {"arrows": "to", "from": "AveOccup_2", "to": "inconf_error_2"}, {"arrows": "to", "from": "Population_2", "to": "HouseAge_0"}, {"arrows": "to", "from": "Population_2", "to": "AveBedrms_0"}, {"arrows": "to", "from": "Population_2", "to": "Latitude_0"}, {"arrows": "to", "from": "HouseAge_0", "to": "Longitude_1"}, {"arrows": "to", "from": "HouseAge_0", "to": "Longitude_2"}, {"arrows": "to", "from": "HouseAge_0", "to": "Latitude_0"}, {"arrows": "to", "from": "HouseAge_0", "to": "inconf_error_2"}, {"arrows": "to", "from": "Latitude_0", "to": "Longitude_1"}, {"arrows": "to", "from": "Latitude_0", "to": "Longitude_2"}, {"arrows": "to", "from": "Longitude_1", "to": "HouseAge_1"}, {"arrows": "to", "from": "HouseAge_1", "to": "Longitude_2"}, {"arrows": "to", "from": "Longitude_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "Longitude_2", "to": "inconf_error_1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
