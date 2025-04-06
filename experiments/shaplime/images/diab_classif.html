@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#ccebc5", "font": {"size": 36}, "id": "Pregnancies_2", "label": "Pregnancies_High", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Pregnancies_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "DiabetesPedigreeFunction_2", "label": "DiabetesPedigreeFunction_High", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 DiabetesPedigreeFunction_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Age_2", "label": "Age_High", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Age_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Age_0", "label": "Age_Low", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Age_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "BMI_1", "label": "BMI_Mid", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BMI_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "SkinThickness_1", "label": "SkinThickness_Mid", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 SkinThickness_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "BloodPressure_1", "label": "BloodPressure_Mid", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BloodPressure_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Pregnancies_1", "label": "Pregnancies_Mid", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Pregnancies_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "BMI_2", "label": "BMI_High", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BMI_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Age_1", "label": "Age_Mid", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Age_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "SkinThickness_2", "label": "SkinThickness_High", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 SkinThickness_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "BloodPressure_2", "label": "BloodPressure_High", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BloodPressure_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Pregnancies_0", "label": "Pregnancies_Low", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Pregnancies_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "Glucose_0", "label": "Glucose_Low", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Glucose_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "BMI_0", "label": "BMI_Low", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BMI_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Insulin_2", "label": "Insulin_High", "level": 8, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Insulin_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "SkinThickness_0", "label": "SkinThickness_Low", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 SkinThickness_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "Glucose_2", "label": "Glucose_High", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Glucose_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "DiabetesPedigreeFunction_0", "label": "DiabetesPedigreeFunction_Low", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 DiabetesPedigreeFunction_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "DiabetesPedigreeFunction_1", "label": "DiabetesPedigreeFunction_Mid", "level": 9, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 DiabetesPedigreeFunction_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Insulin_1", "label": "Insulin_Mid", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Insulin_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "BloodPressure_0", "label": "BloodPressure_Low", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 BloodPressure_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "Glucose_1", "label": "Glucose_Mid", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 Glucose_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#fbb4ae", "font": {"size": 36}, "id": "inconf_error_0", "label": "inconf_error_Low", "level": 10, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_0 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Low)"}, {"color": "#b3cde3", "font": {"size": 36}, "id": "inconf_error_1", "label": "inconf_error_Mid", "level": 11, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_1 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c Mid)"}, {"color": "#ccebc5", "font": {"size": 36}, "id": "inconf_error_2", "label": "inconf_error_High", "level": 11, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 inconf_error_2 (\u0423\u0440\u043e\u0432\u0435\u043d\u044c High)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Pregnancies_2", "to": "Age_2"}, {"arrows": "to", "from": "Pregnancies_2", "to": "Age_0"}, {"arrows": "to", "from": "Age_2", "to": "Pregnancies_1"}, {"arrows": "to", "from": "Age_2", "to": "BloodPressure_2"}, {"arrows": "to", "from": "Age_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "Age_2", "to": "BloodPressure_1"}, {"arrows": "to", "from": "Age_2", "to": "Pregnancies_0"}, {"arrows": "to", "from": "Age_0", "to": "SkinThickness_1"}, {"arrows": "to", "from": "Age_0", "to": "Glucose_2"}, {"arrows": "to", "from": "Age_0", "to": "SkinThickness_0"}, {"arrows": "to", "from": "Age_0", "to": "BMI_1"}, {"arrows": "to", "from": "BMI_1", "to": "SkinThickness_2"}, {"arrows": "to", "from": "BMI_1", "to": "SkinThickness_1"}, {"arrows": "to", "from": "SkinThickness_1", "to": "BMI_2"}, {"arrows": "to", "from": "SkinThickness_1", "to": "Insulin_2"}, {"arrows": "to", "from": "SkinThickness_1", "to": "BloodPressure_1"}, {"arrows": "to", "from": "SkinThickness_1", "to": "Pregnancies_1"}, {"arrows": "to", "from": "SkinThickness_1", "to": "Glucose_0"}, {"arrows": "to", "from": "BloodPressure_1", "to": "BMI_2"}, {"arrows": "to", "from": "Pregnancies_1", "to": "Age_1"}, {"arrows": "to", "from": "BMI_2", "to": "SkinThickness_2"}, {"arrows": "to", "from": "BMI_2", "to": "BloodPressure_2"}, {"arrows": "to", "from": "BMI_2", "to": "Pregnancies_0"}, {"arrows": "to", "from": "SkinThickness_2", "to": "BMI_0"}, {"arrows": "to", "from": "SkinThickness_2", "to": "Insulin_2"}, {"arrows": "to", "from": "BloodPressure_2", "to": "Glucose_0"}, {"arrows": "to", "from": "BloodPressure_2", "to": "BMI_0"}, {"arrows": "to", "from": "Glucose_0", "to": "inconf_error_0"}, {"arrows": "to", "from": "Glucose_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "Glucose_0", "to": "Insulin_1"}, {"arrows": "to", "from": "Glucose_0", "to": "Insulin_2"}, {"arrows": "to", "from": "Glucose_0", "to": "SkinThickness_0"}, {"arrows": "to", "from": "BMI_0", "to": "inconf_error_0"}, {"arrows": "to", "from": "BMI_0", "to": "inconf_error_1"}, {"arrows": "to", "from": "BMI_0", "to": "inconf_error_2"}, {"arrows": "to", "from": "Insulin_2", "to": "SkinThickness_0"}, {"arrows": "to", "from": "Insulin_2", "to": "Glucose_2"}, {"arrows": "to", "from": "Insulin_2", "to": "DiabetesPedigreeFunction_0"}, {"arrows": "to", "from": "Insulin_2", "to": "DiabetesPedigreeFunction_1"}, {"arrows": "to", "from": "Insulin_2", "to": "Glucose_1"}, {"arrows": "to", "from": "SkinThickness_0", "to": "Insulin_1"}, {"arrows": "to", "from": "SkinThickness_0", "to": "BloodPressure_0"}, {"arrows": "to", "from": "SkinThickness_0", "to": "Glucose_1"}, {"arrows": "to", "from": "Glucose_2", "to": "inconf_error_0"}, {"arrows": "to", "from": "Glucose_1", "to": "inconf_error_1"}, {"arrows": "to", "from": "Glucose_1", "to": "inconf_error_2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
