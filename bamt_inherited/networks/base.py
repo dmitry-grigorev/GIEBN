@@ -8,7 +8,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-from typing import Dict, Tuple, List, Callable, Optional, Type, Union, Any, Sequence
+from typing import Dict, Tuple, List, Callable, Optional, Type, Union, Any, Sequence\
+
+from pgmpy.factors.discrete.CPD import TabularCPD
+from pgmpy.models import BayesianNetwork
+
+from pgmpy.estimators import PC, BicScore
 
 class BaseNetworkGI(BaseNetwork):
     """
@@ -25,6 +30,42 @@ class BaseNetworkGI(BaseNetwork):
         self.random_state = random_state
         self.max_cat = max_cat
         self.custom_mapper = custom_mapper
+
+    def collect_all_cpds(self, bn_info, distributions, n_states_map):
+        cpds = list()
+        for index, row in bn_info.iterrows():
+            feat = row["name"].name
+            if len(row["parents"]) == 0:
+                # cpd is just a pd
+                cpd = TabularCPD(feat, n_states_map[feat], [[e] for e in distributions[feat]["cprob"]])
+                cpds.append(cpd)
+            else:
+                cpd_list = [probs for probs in distributions[feat]["cprob"].values()]
+                
+                nrows = len(cpd_list)
+                ncols = len(cpd_list[0])
+                cpd_list = [[cpd_list[i][j] for i in range(nrows)] for j in range(ncols)]
+                
+                cpd = TabularCPD(feat, n_states_map[feat], cpd_list, 
+                                 evidence=row["parents"], evidence_card=[n_states_map[p] for p in row["parents"]])
+                cpds.append(cpd)
+        return cpds
+
+    def to_pgmpy(self):
+        n_states_map_gbn = {feat.name: 2 for feat in self.nodes}
+
+        pgmpy_gbn = BayesianNetwork([list(e) for e in self.edges])
+        cpds = self.collect_all_cpds(self.get_info(), self.distributions, n_states_map_gbn)
+        for e in cpds:
+            if len(e.variables) == 1: # либо узел без родителей, либо изолированный узел
+                feat = e.variables[0]
+                if not any([(feat in edge) for edge in self.edges]):
+                    continue
+            pgmpy_gbn.add_cpds(e)
+
+        self.pgmpy_bn = pgmpy_gbn
+
+        return pgmpy_gbn
 
     def plot(self, output: str):
         """
