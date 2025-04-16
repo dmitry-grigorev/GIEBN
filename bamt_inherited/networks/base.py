@@ -31,6 +31,9 @@ class BaseNetworkGI(BaseNetwork):
         self.max_cat = max_cat
         self.custom_mapper = custom_mapper
 
+        self.pgmpy_bn = None
+        self.isolated_nodes=[]
+
     def collect_all_cpds(self, bn_info, distributions, n_states_map):
         cpds = list()
         for index, row in bn_info.iterrows():
@@ -52,20 +55,23 @@ class BaseNetworkGI(BaseNetwork):
         return cpds
 
     def to_pgmpy(self):
-        n_states_map_gbn = {feat.name: 2 for feat in self.nodes}
+        if self.pgmpy_bn is None:
+            n_states_map_gbn = {feat.name: 2 for feat in self.nodes}
 
-        pgmpy_gbn = BayesianNetwork([list(e) for e in self.edges])
-        cpds = self.collect_all_cpds(self.get_info(), self.distributions, n_states_map_gbn)
-        for e in cpds:
-            if len(e.variables) == 1: # либо узел без родителей, либо изолированный узел
-                feat = e.variables[0]
-                if not any([(feat in edge) for edge in self.edges]):
-                    continue
-            pgmpy_gbn.add_cpds(e)
+            pgmpy_gbn = BayesianNetwork([list(e) for e in self.edges])
+            cpds = self.collect_all_cpds(self.get_info(), self.distributions, n_states_map_gbn)
+            for e in cpds:
+                if len(e.variables) == 1: # либо узел без родителей, либо изолированный узел
+                    feat = e.variables[0]
+                    if not any([(feat in edge) for edge in self.edges]):
+                        self.isolated_nodes.append(feat)
+                        continue
+                pgmpy_gbn.add_cpds(e)
 
-        self.pgmpy_bn = pgmpy_gbn
+            self.pgmpy_bn = pgmpy_gbn
+            
 
-        return pgmpy_gbn
+        return self.pgmpy_bn
 
     def plot(self, output: str):
         """
