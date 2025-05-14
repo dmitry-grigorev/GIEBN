@@ -2,11 +2,16 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
-import old_experiments.experiments3.auxiliary.auxiliary as ex2aux
+#import old_experiments.experiments3.auxiliary.auxiliary as ex2aux
+import scipy.stats as st
+import auxiliary.auxiliary as ex2aux
 
-from old_experiments.experiments3.random_DAG_generation import *
+from random_DAG_generation import *
 import random
 
+def conf_int_mean(a, conf=0.95):
+  mean, sem, m = np.mean(a), st.sem(a), st.t.ppf((1+conf)/2., len(a)-1)
+  return mean - m*sem, mean + m*sem
 
 def simulation(n_features, scoring, construction_method, n_samples=2000, random_state=42, n_trials=20, transitive_mode=False, verbose=False):
     names = ['feature_' + str(i + 1) for i in range(n_features)]
@@ -96,27 +101,40 @@ def simulation(n_features, scoring, construction_method, n_samples=2000, random_
         del kbn_nx
 
         print(f"Stage {i + 1}", end='\r')
+    print(len(asce_acc), n_trials)
 
-    answer = [sum(rde_acc) / n_trials, min(rde_acc), max(rde_acc),
-              sum(wde_acc) / n_trials, min(wde_acc), max(wde_acc),
-              sum(asce_acc) / len(asce_acc), min(asce_acc), max(asce_acc),
-              sum(dsce_acc) / len(dsce_acc), min(dsce_acc), max(dsce_acc),
-              sum(wrong_acc) / n_trials, min(wrong_acc), max(wrong_acc),
-              sum(mean_indegree) / n_trials, min(mean_indegree), max(mean_indegree)
-              ]
+    answer = []
+    for res_list in [rde_acc, wde_acc, asce_acc, dsce_acc, wrong_acc, mean_indegree]:
+        avg = np.mean(res_list)
+        ci95 = conf_int_mean(res_list, conf=0.95)
+        ci99 = conf_int_mean(res_list, conf=0.99)
+        answer+=[avg, ci95[0], ci95[1], ci99[0], ci99[1]]
+
+
+    # answer = [sum(rde_acc) / n_trials, min(rde_acc), max(rde_acc),
+    #           sum(wde_acc) / n_trials, min(wde_acc), max(wde_acc),
+    #           sum(asce_acc) / len(asce_acc), min(asce_acc), max(asce_acc),
+    #           sum(dsce_acc) / len(dsce_acc), min(dsce_acc), max(dsce_acc),
+    #           sum(wrong_acc) / n_trials, min(wrong_acc), max(wrong_acc),
+    #           sum(mean_indegree) / n_trials, min(mean_indegree), max(mean_indegree)
+    #           ]
+    
+
+
     if verbose:
-        print("mean, min and max precision on right direction: {:.3f} {:.3f} {:.3f} \n".format(*answer[:3]))
-        print("mean, min and max precision on wrong direction: {:.3f} {:.3f} {:.3f} \n".format(*answer[3:6]))
-        print("mean, min and max precision on ascending relations: {:.3f} {:.3f} {:.3f} \n".format(*answer[6:9]))
-        print("mean, min and max precision on descending relations: {:.3f} {:.3f} {:.3f} \n".format(*answer[9:12]))
-        print("mean, min and max precision on wrong edges among all in BN: {:.3f} {:.3f} {:.3f} \n".format(*answer[12:15]))
-        print("mean, min and max mean in-degree: {:.3f} {:.3f} {:.3f} \n".format(*answer[15:18]))
-        print("mean in-degrees in BNs according to the original ones")
-    for k, e in mean_indegree_by_original.items():
-        value = sum(e)/len(e) if len(e) > 0 else -np.inf
-        if verbose:
-            print(f"Supposed in-degree: {k}, having {value}")
-        answer.append(value)
+        # print("mean, min and max precision on right direction: {:.3f} {:.3f} {:.3f} \n".format(*answer[:3]))
+        # print("mean, min and max precision on wrong direction: {:.3f} {:.3f} {:.3f} \n".format(*answer[3:6]))
+        # print("mean, min and max precision on ascending relations: {:.3f} {:.3f} {:.3f} \n".format(*answer[6:9]))
+        # print("mean, min and max precision on descending relations: {:.3f} {:.3f} {:.3f} \n".format(*answer[9:12]))
+        # print("mean, min and max precision on wrong edges among all in BN: {:.3f} {:.3f} {:.3f} \n".format(*answer[12:15]))
+        # print("mean, min and max mean in-degree: {:.3f} {:.3f} {:.3f} \n".format(*answer[15:18]))
+        # print("mean in-degrees in BNs according to the original ones")
+        pass
+    # for k, e in mean_indegree_by_original.items():
+    #     value = sum(e)/len(e) if len(e) > 0 else -np.inf
+    #     if verbose:
+    #         print(f"Supposed in-degree: {k}, having {value}")
+    #     answer.append(value)
 
     return answer
 
